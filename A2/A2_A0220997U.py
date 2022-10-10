@@ -4,6 +4,8 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures
 
+REG = 0.0001
+
 # Please replace "MatricNumber" with your actual matric number here and in the filename
 def A2_A0220997U(N):
     """
@@ -28,56 +30,93 @@ def A2_A0220997U(N):
     iris_dataset = load_iris()
 
     # Create dateframe from data in X_train
-    X_train, X_test, Y_train, Y_test = train_test_split(iris_dataset["data"], iris_dataset["target"], test_size=0.8, random_state=N)
+    X_train, X_test, y_train, y_test = train_test_split(iris_dataset["data"], iris_dataset["target"], test_size=0.8, random_state=N)
 
-    print("X_train: (", len(X_train),"),", type(X_train), "\n", X_train,"\n")
-    print("X_test: (", len(X_test),"),", type(X_test), "\n", X_test,"\n")
-    print("Y_train: (", len(Y_train),"),", type(Y_train), "\n", Y_train,"\n")
-    print("Y_test: (", len(Y_test),"),", type(Y_test), "\n",Y_test,"\n")
+    # print("X_train: (", len(X_train),"),", type(X_train), "\n", X_train,"\n")
+    # print("X_test: (", len(X_test),"),", type(X_test), "\n", X_test,"\n")
+    # print("Y_train: (", len(y_train),"),", type(y_train), "\n", y_train,"\n")
+    # print("Y_test: (", len(y_test),"),", type(y_test), "\n",y_test,"\n")
 
     #################################################################################################################################################
 
     Ytr, Yts = [], []
 
-    for elem in Y_train:
+    for elem in y_train:
         new_list = np.array([0,0,0])
         new_list[elem]  = 1
         Ytr.append(new_list)
 
-    for elem in Y_test:
+    for elem in y_test:
         new_list = np.array([0,0,0])
         new_list[elem]  = 1
         Yts.append(new_list)
 
     Ytr, Yts = np.array(Ytr), np.array(Yts)
 
-    print("Ytr: (", len(Ytr),"),", type(Ytr), "\n", Ytr, "\n")
-    print("Yts: (", len(Yts),"),", type(Yts), "\n", Yts, "\n")
+    # print("Ytr: (", len(Ytr),"),", type(Ytr), "\n", Ytr, "\n")
+    # print("Yts: (", len(Yts),"),", type(Yts), "\n", Yts, "\n")
     
     #################################################################################################################################################
     
+
     w_list, Ptrain_list, Ptest_list = [], [], []
 
-    for order in range(1, 11):
-        poly = PolynomialFeatures(order)
-        # print(poly, "\n")
+    for test_order in range(1, 11):
+        poly = PolynomialFeatures(test_order)
 
-        P_test = poly.fit_transform(X_train)
-        Ptrain_list.append(P_test)
-        # print("Matrix P:" , P.shape, "\n", P, "\n")  
+        P_train, P_test = poly.fit_transform(X_train), poly.fit_transform(X_test)
+        Ptrain_list.append(P_train)
+        Ptest_list.append(P_test)
 
-        if (P_test.shape[1] > P_test.shape[0]): # Use Dual Solution
-            w = P_test.T @ inv(P_test @ P_test.T) @ Y_train
+        if P_train.shape[1] >= P_train.shape[0]: # Use Dual Solution
+            PPT = P_train @ P_train.T
+            lamda_i = REG * np.identity(PPT.shape[0])
+            
+            w = P_train.T @ inv(PPT + lamda_i) @ Ytr
+
         else: # Use Primal Solution
-            w = (inv(P_test.T @ P_test) @ P_test.T) @ Y_train
+            PTP = P_train.T @ P_train
+            lamda_i = REG * np.identity(PTP.shape[0])
+            
+            w = inv(PTP + lamda_i) @ P_train.T @ Ytr
 
         w_list.append(w)
 
-    w_list, Ptrain_list, Ptest_list = np.array(w_list), np.array(Ptrain_list), np.array(Ptest_list)
-
-    print("w_list: (", len(w_list),"),", type(w_list), "\n", w_list, "\n")       
-    print("Ptrain_list: (", len(Ptrain_list),"),", type(Ptrain_list), "\n", Ptrain_list, "\n")       
-    print("Ptest_list: (", len(Ptest_list),"),", type(Ptest_list), "\n", Ptest_list, "\n")       
+    # print("w_list: (", len(w_list),"),", type(w_list), "\n", w_list, "\n")       
+    # print("Ptrain_list: (", len(Ptrain_list),"),", type(Ptrain_list), "\n", Ptrain_list, "\n")       
+    # print("Ptest_list: (", len(Ptest_list),"),", type(Ptest_list), "\n", Ptest_list, "\n")       
     
+    #################################################################################################################################################
+
+    y_trainPred_list, y_testPred_list = [], []
+
+    for order, p_elem in enumerate(Ptrain_list):
+        y_trainPred_list.append(p_elem @ w_list[order])
+
+    for order, p_elem in enumerate(Ptest_list):
+        y_testPred_list.append(p_elem @ w_list[order])
+
+    error_train_array, error_test_array = [], []
+  
+    for order in y_trainPred_list:
+        errCount = 0
+        for index, pred_test in enumerate(order):
+            print(list(pred_test).index(max(pred_test)), list(Ytr[index]).index(max(Ytr[index])))
+
+            if list(pred_test).index(max(pred_test)) != list(Ytr[index]).index(max(Ytr[index])):
+                errCount += 1
+
+        error_train_array.append(errCount)
+
+    for order in y_testPred_list:
+        errCount = 0
+        for index, pred_test in enumerate(order):
+            print(list(pred_test).index(max(pred_test)), list(Yts[index]).index(max(Yts[index])))
+
+            if list(pred_test).index(max(pred_test)) != list(Yts[index]).index(max(Yts[index])):
+                errCount += 1
+
+        error_test_array.append(errCount)
+
     # return in this order
-    # return X_train, y_train, X_test, y_test, Ytr, Yts, Ptrain_list, Ptest_list, w_list, error_train_array, error_test_array
+    return X_train, y_train, X_test, y_test, Ytr, Yts, Ptrain_list, Ptest_list, w_list, error_train_array, error_test_array
