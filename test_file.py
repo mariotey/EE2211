@@ -1,4 +1,7 @@
-# import A2_A0220997U as mario
+import A2.A2_A0220997U as grading
 
-print("Hello World")
+N = 5
+
+grading.A2_A0220997U(N)
+
 print("Complete")
