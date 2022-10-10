@@ -57,7 +57,7 @@ def A2_A0220997U(N):
     # print("Yts: (", len(Yts),"),", type(Yts), "\n", Yts, "\n")
     
     #################################################################################################################################################
-    
+
 
     w_list, Ptrain_list, Ptest_list = [], [], []
 
@@ -69,16 +69,16 @@ def A2_A0220997U(N):
         Ptest_list.append(P_test)
 
         if P_train.shape[1] >= P_train.shape[0]: # Use Dual Solution
-            PPT = P_train @ P_train.T
-            lamda_i = REG * np.identity(PPT.shape[0])
+            ppt = P_train @ P_train.T
+            lamda_i = REG * np.identity(ppt.shape[0])
             
-            w = P_train.T @ inv(PPT + lamda_i) @ Ytr
+            w = P_train.T @ inv(ppt + lamda_i) @ Ytr
 
         else: # Use Primal Solution
-            PTP = P_train.T @ P_train
-            lamda_i = REG * np.identity(PTP.shape[0])
+            ptp = P_train.T @ P_train
+            lamda_i = REG * np.identity(ptp.shape[0])
             
-            w = inv(PTP + lamda_i) @ P_train.T @ Ytr
+            w = inv(ptp + lamda_i) @ P_train.T @ Ytr
 
         w_list.append(w)
 
@@ -101,7 +101,7 @@ def A2_A0220997U(N):
     for order in y_trainPred_list:
         errCount = 0
         for index, pred_test in enumerate(order):
-            print(list(pred_test).index(max(pred_test)), list(Ytr[index]).index(max(Ytr[index])))
+            # print(list(pred_test).index(max(pred_test)), list(Ytr[index]).index(max(Ytr[index])))
 
             if list(pred_test).index(max(pred_test)) != list(Ytr[index]).index(max(Ytr[index])):
                 errCount += 1
@@ -111,12 +111,17 @@ def A2_A0220997U(N):
     for order in y_testPred_list:
         errCount = 0
         for index, pred_test in enumerate(order):
-            print(list(pred_test).index(max(pred_test)), list(Yts[index]).index(max(Yts[index])))
+            # print(list(pred_test).index(max(pred_test)), list(Yts[index]).index(max(Yts[index])))
 
             if list(pred_test).index(max(pred_test)) != list(Yts[index]).index(max(Yts[index])):
                 errCount += 1
 
         error_test_array.append(errCount)
+
+    error_train_array = np.array(error_train_array)
+    error_test_array = np.array(error_test_array)
+
+    print(type(X_train), type(y_train), type(X_test), type(y_test), type(Ytr), type(Yts), type(Ptrain_list), type(Ptest_list), type(w_list), type(error_train_array), type(error_test_array))
 
     # return in this order
     return X_train, y_train, X_test, y_test, Ytr, Yts, Ptrain_list, Ptest_list, w_list, error_train_array, error_test_array
