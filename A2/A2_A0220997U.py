@@ -58,7 +58,6 @@ def A2_A0220997U(N):
     
     #################################################################################################################################################
 
-
     w_list, Ptrain_list, Ptest_list = [], [], []
 
     for test_order in range(1, 11):
@@ -118,10 +117,10 @@ def A2_A0220997U(N):
 
         error_test_array.append(errCount)
 
-    error_train_array = np.array(error_train_array)
-    error_test_array = np.array(error_test_array)
+    error_train_array = np.array(error_train_array).reshape((len(error_train_array),1))
+    error_test_array = np.array(error_test_array).reshape((len(error_test_array),1))
 
-    # print(type(X_train), type(y_train), type(X_test), type(y_test), type(Ytr), type(Yts), type(Ptrain_list), type(Ptest_list), type(w_list), type(error_train_array), type(error_test_array))
+    print(type(X_train), type(y_train), type(X_test), type(y_test), type(Ytr), type(Yts), type(Ptrain_list), type(Ptest_list), type(w_list), type(error_train_array), type(error_test_array))
 
     # return in this order
     return X_train, y_train, X_test, y_test, Ytr, Yts, Ptrain_list, Ptest_list, w_list, error_train_array, error_test_array

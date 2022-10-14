@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "C:\\Users\\teymi\\Desktop\\EE2211 Assignment\\test_file.py",          
+            "program":  "C:\\Users\\Tey Ming Chuan\\OneDrive - National University of Singapore\\Desktop\\EE2211\\Assignment\\test_file.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
