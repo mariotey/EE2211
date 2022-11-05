@@ -1,7 +1,8 @@
-import A2.A2_A0220997U as grading
+import A3.A3_A0220997U as grading
 
-N = 5
+learning_rate = 0.1
+num_iters = 10
 
-X_train, y_train, X_test, y_test, Ytr, Yts, Ptrain_list, Ptest_list, w_list, error_train_array, error_test_array = grading.A2_A0220997U(N)
+a_out, f1_out, b_out, f2_out, c_out, d_out, f3_out = grading.A3_A0220997U(learning_rate, num_iters)
 
 print("Complete\n")
