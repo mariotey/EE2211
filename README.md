@@ -1,7 +1,7 @@
 # EE2211: Introduction to Machine Learning #
 
 ## Description ##
-This module introduces various machine learning concepts and applications, and the tools needed to understand them. Topics include supervised and unsupervised machine learning techniques, optimization, overfitting, regularization, cross-validation and evaluation metrics. The mathematical tools include basic topics in probability and statistics, linear algebra, and optimization. These concepts will be illustrated through various machine-learning techniques and examples.
+This module introduces students to various machine learning concepts and applications, and the tools needed to understand them. Topics include supervised and unsupervised machine learning techniques, optimization, overfitting, regularization, cross-validation and evaluation metrics. The mathematical tools include basic topics in probability and statistics, linear algebra, and optimization. These concepts will be illustrated through various machine-learning techniques and examples. (Description from https://nusmods.com/modules/EE2211/introduction-to-machine-learning)
 
 This repository contains the assignments that the author has done previously for this module.
 - A1: Matrix Calculation
