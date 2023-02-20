@@ -19,7 +19,10 @@ This repository contains the assignments that the author has done previously for
 ### Executing Program ###
 - After all files have been cloned, simply run "test_file.py"
 - To run AX, kindly make the following amendments to "test_file.py"
-  - line 1: import AX.AX_A0220997U as grading
+  - In line 1, modify: 
+    ```python
+    import AX.AX_A0220997U as grading
+    ```
   - line 6: InvXTX, w = grading.A1_A0220997U(X,y) (For A1; kindly input matrix for X and y)
   - line 6: X_train, y_train, X_test, y_test, Ytr, Yts, Ptrain_list, Ptest_list, w_list, error_train_array, error_test_array = grading.A2_A0220997U(5) (For A2)
   - line 6: a_out, f1_out, b_out, f2_out, c_out, d_out, f3_out = grading.A3_A0220997U(learning_rate, num_iters) (For A3)
